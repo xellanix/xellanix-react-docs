@@ -1,0 +1,36 @@
+.xellanix-tree {
+    --node-gap: .3em;
+}
+
+.xellanix-tree-node {
+    padding: var(--node-gap) 0 !important;
+    border-radius: .3em;
+    cursor: pointer;
+}
+.xellanix-tree-node:hover {
+    background-color: var(--information-background-color);
+}
+
+.xellanix-tree-label {
+    font-weight: 600;
+    -webkit-user-select: none;
+    user-select: none;
+}
+.xellanix-tree-label.leaf {
+    margin-left: 1.3em;
+}
+
+button.button.icon.no-border.xellanix-tree-expander {
+    height: 1.3em;
+    aspect-ratio: 1/1;
+    margin-right: .2em;
+    padding: .2em !important;
+    align-self: initial !important;
+}
+.xellanix-tree-expander.expanded {
+    transform: rotate(90deg);
+}
+
+.xellanix-tree-children {
+    margin-left: 1em;
+}

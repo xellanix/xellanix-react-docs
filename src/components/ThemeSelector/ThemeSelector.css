@@ -1,0 +1,76 @@
+#theme-selector {
+    --selector-label-gap: .4em;
+    --selector-label-icon: .9em;
+    --selector-label-text: 2em;
+
+    --selector-padding-v: .4em;
+    --selector-padding-h: .6em;
+    --selector-border-radius: .3em;
+
+    --selector-option-icon-only-w: calc((var(--selector-padding-h) * 2 + var(--selector-label-icon)));
+    /* --selector-option-icon-only-w + margin-left + text */
+    --selector-option-w: calc(var(--selector-option-icon-only-w) + var(--selector-label-gap) + var(--selector-label-text));
+    --selector-option-w-hover: calc(var(--selector-option-w) + var(--selector-option-icon-only-w));
+
+    display: flex;
+    flex-direction: row;
+    width: calc(var(--selector-option-icon-only-w) * 2);
+    height: fit-content;
+    background-color: var(--ternary-background-color2);
+    box-shadow: 0px 0px 42px 0px rgba(0, 0, 0, .15);
+    border-radius: var(--selector-border-radius);
+    transition: width 200ms ease-out;
+}
+
+#theme-selector.text-overlay:hover {
+    width: var(--selector-option-w-hover);
+}
+
+.theme-option-radio {
+    display: none;
+    margin: 0;
+}
+
+.theme-option {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    padding: var(--selector-padding-v) var(--selector-padding-h);
+    cursor: pointer;
+    border-radius: var(--selector-border-radius);
+    width: var(--selector-label-icon);
+    font-size: 1em !important;
+    transition: background-color 0ms ease-out, width 200ms ease-out;
+}
+
+.text-overlay .theme-option:hover {
+    width: calc(var(--selector-label-icon) + var(--selector-label-gap) + var(--selector-label-text));
+}
+
+.theme-option .theme-icon {
+    height: var(--selector-label-icon);
+    aspect-ratio: 1/1;
+    display: flex;
+    align-items: center;
+    justify-content: center
+}
+
+.theme-option span {
+    display: flex;
+    overflow: hidden;
+    word-wrap: nowrap;
+    align-self: stretch;
+    opacity: 0;
+    font-size: .8em !important;
+    transition: opacity 400ms ease-out;
+    margin-left: var(--selector-label-gap);
+}
+
+.text-overlay .theme-option:hover span {
+    opacity: 1;
+}
+
+.theme-option-radio:checked + .theme-option {
+    background-color: var(--accent-color);
+    color: var(--accent-button-text-color);
+}

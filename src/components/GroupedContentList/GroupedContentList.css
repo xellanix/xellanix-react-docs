@@ -1,0 +1,37 @@
+.xellanix-grouped-content-list > div:not(:first-child) {
+	border-top: 1px solid var(--separator-color2);
+	padding-top: var(--section-gap-vertical);
+}
+
+.xellanix-grouped-content-list h6 {
+	margin-left: 0.7em !important;
+}
+
+.xellanix-grouped-content-list ul {
+	list-style-type: none !important;
+	padding: 0 !important;
+	margin: 0.4em 0 0 !important;
+}
+
+.xellanix-grouped-content-list li input[type="radio"] {
+	display: none;
+}
+
+.xellanix-grouped-content-list li input[type="radio"]:checked + label {
+	background-color: var(--accent-color);
+	color: var(--accent-button-text-color);
+}
+
+.xellanix-grouped-content-list li label {
+	flex: 1 1 0;
+	padding: 0.4em 0.8em !important;
+	border-radius: .3em;
+	cursor: pointer;
+	transition-property: background-color, color;
+	transition-duration: 87ms;
+	transition-timing-function: ease-out;
+}
+
+.xellanix-grouped-content-list li label:hover {
+	background-color: var(--information-background-color);
+}

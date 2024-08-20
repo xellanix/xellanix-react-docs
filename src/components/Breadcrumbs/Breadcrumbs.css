@@ -1,0 +1,19 @@
+.crumbs-gap {
+    gap: .5em !important;
+}
+
+.xellanix-breadcrumbs {
+    background-color: var(--ternary-background-color);
+    padding: .6em .8em;
+    border-radius: .3em;
+}
+
+.xellanix-breadcrumbs .last {
+    font-weight: 700;
+    color: var(--accent-color)
+}
+
+.xellanix-breadcrumbs-separator {
+    width: 1em;
+    height: 1em;
+}

@@ -1,0 +1,137 @@
+.light-theme {
+	--pre-background-color: #eff1f5;
+	--code-tag-cage-color: #9ca0b0;
+	--code-element-color: #d20f39;
+	--code-property-color: #006aee99;
+	--code-brackets-color: #04a5e5;
+	--code-variable-color: #798baf;
+	--code-operator-color: #8839ef;
+	--code-string-color: #40a02b;
+	--code-quote-color: #40a02b;
+	--code-function-color: #e19235;
+	--code-parameter-color: #00b6c2;
+	--code-type-color: #006aee99;
+	--code-keyword-color: #d20f39;
+	--code-numeric-color: #006aee;
+	--code-comment-color: #9ca0b0;
+	--code-constant-color: #a2e57b;
+}
+
+.dark-theme {
+	--pre-background-color: #273136;
+	--code-tag-cage-color: #8b9798;
+	--code-element-color: #ff6d7e;
+	--code-property-color: #7cd5f1;
+	--code-brackets-color: #ffed72;
+	--code-variable-color: #b6bfbd;
+	--code-operator-color: #ff6d7e;
+	--code-string-color: #ffed72;
+	--code-quote-color: #8b9798;
+	--code-function-color: #a2e57b;
+	--code-parameter-color: #ffb270;
+	--code-type-color: #7cd5f1;
+	--code-keyword-color: #ff6d7e;
+	--code-numeric-color: #baa0f8;
+	--code-comment-color: #6b7678;
+	--code-constant-color: #a2e57b;
+}
+
+.xellanix-code-block {
+	border-radius: 0.5em;
+	overflow: hidden;
+}
+.xellanix-code-block > div {
+	background-color: var(--ternary-background-color);
+	padding: .5em;
+}
+.xellanix-code-block > div > label {
+	padding: .5em .7em !important;
+}
+.xellanix-code-block > div > .button.icon.no-border {
+	line-height: 1.3 !important;
+	padding: .5em .7em !important;
+}
+
+pre.xellanix-code-block-pre {
+	background-color: var(--pre-background-color);
+	padding: 1em;
+	overflow: auto;
+	box-sizing: border-box;
+	line-height: 1.3;
+	margin: 0;
+	/* max-width: calc(
+		99.5dvw - (10.2em + 47.5px + min(175px, max(12dvw, 60px)) + var(--section-gap-horizontal))
+	); */
+	/* max-width: 50px; */
+}
+
+pre.xellanix-code-block-pre > div {
+	display: inline-flex;
+	margin-right: 1em;
+}
+
+code .tc {
+	/* tag cage */
+	color: var(--code-tag-cage-color);
+}
+code .el {
+	/* element */
+	color: var(--code-element-color);
+}
+code .pr {
+	/* property */
+	color: var(--code-property-color);
+	font-style: italic;
+}
+code .bc {
+	/* brackets */
+	color: var(--code-brackets-color);
+}
+code .sq {
+	/* square brackets */
+	color: var(--code-brackets-color);
+}
+code .vr {
+	/* variable */
+	color: var(--code-variable-color);
+}
+code .op {
+	/* operator */
+	color: var(--code-operator-color);
+}
+code .st {
+	/* string */
+	color: var(--code-string-color);
+}
+code .qt {
+	/* quote */
+	color: var(--code-quote-color);
+}
+code .fn {
+	/* function */
+	color: var(--code-function-color);
+}
+code .pm {
+	/* parameter */
+	color: var(--code-parameter-color);
+	font-style: italic;
+}
+code .ty {
+	/* type */
+	color: var(--code-type-color);
+	font-style: italic;
+}
+code .kw {
+	/* keyword */
+	color: var(--code-keyword-color);
+	font-style: italic;
+}
+code .nm {
+	/* numeric */
+	color: var(--code-numeric-color);
+}
+code .cm {
+	/* comment */
+	color: var(--code-comment-color);
+	font-style: italic;
+}
