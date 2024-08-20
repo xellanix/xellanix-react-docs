@@ -18,8 +18,8 @@ importers:
         specifier: ^18.3.1
         version: 18.3.1(react@18.3.1)
       xellanix-react:
-        specifier: ^2.2.2
-        version: 2.2.2(react@18.3.1)
+        specifier: ^2.2.3
+        version: 2.2.3(react@18.3.1)
     devDependencies:
       '@eslint/js':
         specifier: ^9.8.0
@@ -1222,8 +1222,8 @@ packages:
   wrappy@1.0.2:
     resolution: {integrity: sha512-l4Sp/DRseor9wL6EvV2+TuQn63dMkPjZ/sp9XkghTEbV9KlPS1xUsZ3u7/IQO4wxtcFB4bgpQPRcR3QCvezPcQ==}
 
-  xellanix-react@2.2.2:
-    resolution: {integrity: sha512-arc2oWnnooQLEelAAFZoo4if3TKoAfYcbhs8MnEIf/bjG2cPaOtpFuPIg0QY7cRrPhLQ0uJSBmVi4695Z+j4Ww==}
+  xellanix-react@2.2.3:
+    resolution: {integrity: sha512-vCfmBkbW5mE4KBbfK34/M/Wu4mgbqHX9cM++zsVzwNAMT96ZvoEs03JsX2LQ43fQL2bR5x2H88sMPchIPsZKWQ==}
     peerDependencies:
       react: ^18.3.1
 
@@ -2338,7 +2338,7 @@ snapshots:
 
   wrappy@1.0.2: {}
 
-  xellanix-react@2.2.2(react@18.3.1):
+  xellanix-react@2.2.3(react@18.3.1):
     dependencies:
       react: 18.3.1
 
