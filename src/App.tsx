@@ -5,6 +5,7 @@ import GroupedContentList, {
 } from "./components/GroupedContentList/GroupedContentList";
 import { Breadcrumbs } from "./components/Breadcrumbs/Breadcrumbs";
 import ThemeSelector from "./components/ThemeSelector/ThemeSelector";
+import { BenchmarkDev } from "./Benchmark";
 
 import { Welcome } from "./contents/getting-started/Welcome";
 import { InfoBoxDev } from "./contents/getting-started/InfoBox";
@@ -50,7 +51,10 @@ let groupList: GroupedContent[] = [
 if (import.meta.env.DEV)
     groupList.push({
         name: "Development",
-        items: [{ name: "CodeBlock", content: <CodeBlockDev /> }],
+        items: [
+            { name: "CodeBlock", content: <CodeBlockDev /> },
+            { name: "Benchmark", content: <BenchmarkDev /> },
+        ],
     });
 
 window.addEventListener("keydown", (ev) => {

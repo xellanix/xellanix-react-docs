@@ -1,30 +1,7 @@
-import { useId } from "react";
+import { memo, Suspense, useId } from "react";
 import "./CodeBlock.css";
 
-const tag = `<button
-    type="button"
-    className="button accent"
-    onClick={() => {
-        return popup.setIsOpen((prev = false) => !prev);
-    }}>
-    Open Popup
-    {children}
-    Open Popup
-    {children}
-    <div>
-        <div disable={true, false}>Div 1</div>
-        <div>{children}</div>
-        <div>
-            Div 2
-        </div>
-        <div>
-            {children}
-            Div 2
-        </div>
-    </div>
-</button>`;
-
-type CodeFormat = "plain-text" | "tsx" | "jsx";
+type CodeFormat = "plain-text" | "tsx" | "jsx" | "html";
 
 const outsideTagBody = (code: string, index: number): boolean => {
     const before = code.substring(0, index);
@@ -75,7 +52,7 @@ const substrOf = (code: string, startIndex: number, pred: (c: string) => boolean
 };
 
 const getLine = (code: string, startIndex: number) => getUntil(code, startIndex, "\n");
-const getNumbers = (code: string, startIndex: number): [string, number] => {
+const getNumbers = (code: string, startIndex: number): string => {
     let str = "";
     let i = startIndex;
     let hasDecimalPoint = false;
@@ -91,11 +68,144 @@ const getNumbers = (code: string, startIndex: number): [string, number] => {
         }
         i++;
     }
-    return [str, i];
+    return str;
 };
 const getBoundary = (code: string, startIndex: number) =>
     substrOf(code, startIndex, (c) => isAlpha(c) || isNumeric(c) || c === "_");
 const getSpaces = (code: string, startIndex: number) => substrOf(code, startIndex, isSpace);
+
+const getTag = (code: string, startIndex: number) => {
+    let substr = "";
+    let rootElem = "";
+    let tag = 0;
+    let isIn = false;
+
+    for (let i = startIndex; i < code.length; i++) {
+        const c = code[i];
+
+        if (isSpace(c)) substr += c;
+        else if (isNumeric(c) && (isSpace(code[i - 1]) || code[i - 1] === "<") && isIn) {
+            console.log("null 1", c);
+            return null;
+        } else if (c === "=") {
+            substr += c;
+            i++;
+            if (code[i] === "=" && isIn) {
+                console.log("null 2");
+                return null;
+            }
+
+            for (; i < code.length; i++) {
+                const cc = code[i];
+
+                substr += cc;
+
+                if (isSpace(cc)) continue;
+                else if (cc === '"' || cc === "'") {
+                    const [text] = getUntil(code, i + 1, cc);
+                    if (text.length > 0) {
+                        substr += text;
+                        i += text.length + 1;
+                    }
+                    substr += cc;
+                    break;
+                } else if (cc === "{") {
+                    const inside = getInsideBrackets(code, i);
+                    if (inside !== null && inside.length > 0) {
+                        substr += inside;
+                        i += inside.length;
+                    }
+                    break;
+                } else if (cc === "}") break;
+            }
+        } else if (c === "<" && code[i + 1] === "!" && code[i + 2] === "-" && code[i + 3] === "-") {
+            isIn = true;
+            substr += "<!--";
+            i += 3;
+        } else if (c === "<" && tag === 0) {
+            isIn = true;
+            substr += c;
+            while (isSpace(code[i + 1])) i++;
+
+            if (code[i + 1] === ">") {
+                rootElem = "";
+                tag = 1;
+            } else if (isAlpha(code[i + 1]) || code[i + 1] === "_") {
+                rootElem = getBoundary(code, i + 1);
+                tag = 1;
+            }
+        } else if (c === "<" && tag > 0) {
+            isIn = true;
+            substr += c;
+            while (isSpace(code[i + 1])) i++;
+
+            if (code[i + 1] === "/") {
+                if (rootElem === getBoundary(code, i + 2)) {
+                    const end = "/" + rootElem + ">";
+                    substr += end;
+                    i += end.length;
+                }
+                tag--;
+
+                if (tag === 0) break;
+            } else if (isAlpha(code[i + 1]) || code[i + 1] === "_") {
+                tag++;
+            }
+        } else if (c === "/" && code[i + 1] === ">") {
+            isIn = false;
+            substr += c + ">";
+            i++;
+            tag--;
+
+            if (tag === 0) break;
+        } else if (c === ">") {
+            isIn = false;
+            substr += c;
+        } else if (!isIn && c === "{") {
+            substr += c;
+            const inside = getInsideBrackets(code, i);
+            if (inside !== null && inside.length > 0) {
+                substr += inside;
+                i += inside.length;
+            }
+        } else if (
+            isIn &&
+            !(
+                isAlpha(c) ||
+                isNumeric(c) ||
+                c === "_" ||
+                c === "<" ||
+                c === ">" ||
+                c === "/" ||
+                c === "{" ||
+                c === "}" ||
+                c === "-"
+            )
+        ) {
+            console.log("null 3", substr);
+            return null;
+        } else if (tag > 0) substr += c;
+    }
+
+    return substr;
+};
+
+const getInsideBrackets = (code: string, startIndex: number) => {
+    let brs = 1;
+    let substr = "";
+
+    for (let i = startIndex + 1; i < code.length; i++) {
+        const c = code[i];
+
+        if (c === "{") brs++;
+        else if (c === "}") brs--;
+
+        if (brs > 0) substr += c;
+        else return substr;
+    }
+
+    return null;
+};
 
 const colorize = (code: string) => {
     let chars = "";
@@ -247,6 +357,91 @@ const colorize = (code: string) => {
     return constructed;
 };
 
+const colorizeHtml = (code: string) => {
+    let chars = "";
+    let type = "";
+
+    const constructed: React.ReactNode[] = [];
+
+    let i = 0;
+
+    const set = (currentType: string, char: string, index?: number) => {
+        if (type === currentType || type === "") {
+            chars += char;
+        } else {
+            constructed.push(
+                <span key={index ?? i} className={type}>
+                    {chars}
+                </span>
+            );
+            chars = char;
+        }
+        type = currentType;
+    };
+
+    const processCode = () => {
+        let inside = getInsideBrackets(code, i);
+        if (inside !== null) {
+            inside = "{" + inside + "}";
+
+            const j = i + inside.length;
+            set("", "", j);
+            constructed.push(colorizeTsx(inside));
+
+            i = j - 1;
+        } else set("bc", code[i]);
+    };
+
+    for (; i < code.length; i++) {
+        const c = code[i];
+
+        if (
+            c === "<" ||
+            (code[i - 1] === "<" && c === "/") ||
+            c === ">" ||
+            (c === "/" && code[i + 1] === ">")
+        ) {
+            set("tc", c);
+        } else if (c === "{" || c === "}") {
+            if (c === "{") processCode();
+            else set("bc", c);
+        } else if (c === `"` || c === `'`) {
+            const [text] = getUntil(code, i + 1, c);
+            set("qt", c);
+            i++;
+            if (text.length > 0) {
+                set("st", text);
+                i += text.length;
+            }
+            set("qt", c);
+        } else if (c === "=") set("op", c);
+        else if (isSpace(c)) {
+            const nc = c + getSpaces(code, i + 1);
+            i += nc.length - 1;
+
+            if (type === "ch") set("ch", nc);
+            else set("ws", nc);
+        } else {
+            const isel = code[i - 1] === "<" || code[i - 1] === "/";
+
+            if ((type === "tc" && isel) || type === "el") set("el", c);
+            else if ((type === "tc" && !isel) || type === "ch") set("ch", c);
+            else if (type === "pr") set("pr", c);
+            else if (type === "ws") {
+                if (!outsideTagBody(code, i)) set("pr", c);
+                else set("ch", c);
+            }
+        }
+    }
+
+    constructed.push(
+        <span key={i} className={type}>
+            {chars}
+        </span>
+    );
+    return constructed;
+};
+
 const colorizeTsx = (code: string) => {
     let chars = "";
     let type = "";
@@ -358,20 +553,21 @@ const colorizeTsx = (code: string) => {
         ];
         const numerics = ["true", "false"];
 
+        const hasInclude = (tp: string) => {
+            chars = chars.substring(0, chars.length - reset.length);
+            if (chars.length === 0) type = "";
+            set(tp, reset, i - 1);
+            reset = "";
+        };
+
         if (types.includes(reset)) {
             if (reset === "function") isFuncParams = 0;
 
-            chars = chars.substring(0, chars.length - reset.length);
-            set("ty", reset, i - 1);
-            reset = "";
+            hasInclude("ty");
         } else if (keywords.includes(reset)) {
-            chars = chars.substring(0, chars.length - reset.length);
-            set("kw", reset, i - 1);
-            reset = "";
+            hasInclude("kw");
         } else if (numerics.includes(reset)) {
-            chars = chars.substring(0, chars.length - reset.length);
-            set("nm", reset, i - 1);
-            reset = "";
+            hasInclude("nm");
         }
         if (clear) reset = "";
         set(currentType, c);
@@ -444,7 +640,8 @@ const colorizeTsx = (code: string) => {
     const isLeadedDecimal = () => code[i] === "." && isNumeric(code[i + 1]);
 
     const processInBrackets = (c: string, brackets: string) => {
-        if (code[i - 1] === brackets[0]) {
+        if (isNumeric(c)) setI("nm", c + getNumbers(code, i + 1));
+        else if (code[i - 1] === brackets[0]) {
             if (isArrowFunc(true) || isFuncParams > 0) setParameter(c);
             else setVariable(c);
         } else if (code[i - 1] === brackets[1] && c === ".") setVariable(c, true);
@@ -515,6 +712,18 @@ const colorizeTsx = (code: string) => {
                 if (reset.length === 0) continue;
             }
 
+            if (c === "<") {
+                const tag = getTag(code, i);
+
+                if (tag !== null) {
+                    set("", "");
+                    const nodes = colorizeHtml(tag);
+                    constructed.push(nodes);
+                    i += tag.length - 1;
+                    continue;
+                }
+            }
+
             set("op", c);
         } else if (c === "?") {
             if (code[i + 1] !== "?") ternaryOperator = true;
@@ -530,7 +739,7 @@ const colorizeTsx = (code: string) => {
         else if (isSpreadOperator()) setI("op", "...");
         else if (isLeadedDecimal()) {
             reset = "";
-            const numbers = c + code[i + 1] + getNumbers(code, i + 2)[0];
+            const numbers = c + code[i + 1] + getNumbers(code, i + 2);
             setI("nm", numbers);
         } else {
             if (type === "qt") setVariable(c);
@@ -543,18 +752,18 @@ const colorizeTsx = (code: string) => {
                 else setBVar();
             } else if (type === "st") set("st", c);
             else if (type === "ws") {
-                if (isNumeric(c)) setI("nm", c + getNumbers(code, i + 1)[0]);
+                if (isNumeric(c)) setI("nm", c + getNumbers(code, i + 1));
                 else if (isArrowFunc() || isFuncParams > 0) setParameter(c);
                 else setFuncName();
             } else if (type === "bc") processInBrackets(c, "()");
             else if (type === "pm") {
                 if (c === ".") setVariable(c, true);
                 else if (c === "," || c === ";") setKeyword("vr", c);
-                else if (isNumeric(c)) setI("nm", c + getNumbers(code, i + 1)[0]);
+                else if (isNumeric(c)) setI("nm", c + getNumbers(code, i + 1));
                 else setParameter(c);
             } else if (type === "nm") setAnyOrVar(isNumeric(c) || c === ".", "nm", c);
             else if (type === "op") {
-                if (isNumeric(c)) setI("nm", c + getNumbers(code, i + 1)[0]);
+                if (isNumeric(c)) setI("nm", c + getNumbers(code, i + 1));
                 else if (c === ".") setVariable(c, true);
                 else if (isArrowFunc(true) || isFuncParams > 0) setParameter(c);
                 else setBVar();
@@ -562,15 +771,40 @@ const colorizeTsx = (code: string) => {
             else setBVar();
         }
     }
+    if (reset.length > 0) {
+        setKeyword("", "");
 
-    addNode();
+        if (reset.length > 0) {
+            addNode();
+        }
+    } else addNode();
+
     return constructed;
 };
 
-export function CodeBlock({
+const copyCode = (code: string) => (ev: React.MouseEvent<HTMLButtonElement>) => {
+    const elem = ev.currentTarget;
+
+    navigator.clipboard
+        .writeText(code)
+        .then(() => {
+            if (!elem) return;
+
+            elem.innerText = "Copied";
+            setTimeout(() => (elem.innerText = "Copy"), 1000);
+        })
+        .catch(() => {
+            if (!elem) return;
+
+            elem.innerText = "Failed";
+            setTimeout(() => (elem.innerText = "Copy"), 1000);
+        });
+};
+
+export const CodeBlock = memo(function CodeBlock({
     formatAs = "plain-text",
     title = "tsx",
-    children = tag,
+    children = "",
 }: {
     formatAs?: CodeFormat;
     title?: string;
@@ -580,32 +814,50 @@ export function CodeBlock({
 
     return (
         <div id={`xcb-${_thisId}`} className="xellanix-code-block vertical-layout flex-no-gap">
-            <div
-                className="horizontal-layout flex-align-middle">
+            <div className="horizontal-layout flex-align-middle">
                 <label htmlFor={`xcb-${_thisId}`} className="flex-fill">
                     {title}
                 </label>
-                <button type="button" className="button icon no-border">
+                <button
+                    type="button"
+                    className="button icon no-border"
+                    onClick={copyCode(children)}>
                     Copy
                 </button>
             </div>
             <pre className="xellanix-code-block-pre">
                 <div>
                     <code>
-                        {formatAs === "plain-text"
-                            ? children
-                            : formatAs === "tsx"
-                            ? colorizeTsx(children)
-                            : formatAs === "jsx"
-                            ? colorize(children)
-                            : ""}
+                        <Suspense fallback={<div>Loading...</div>}>
+                            <ColoredCodeBlock type={formatAs} code={children} />
+                        </Suspense>
                     </code>
                 </div>
             </pre>
         </div>
     );
-}
+})
 
-/*
+const switchType = (type: CodeFormat = "plain-text", code: string = "") => {
+    switch (type) {
+        case "plain-text":
+            return code;
+        case "tsx":
+            return colorizeTsx(code);
+        case "jsx":
+            return colorize(code);
+        default:
+            return code;
+    }
+};
 
-*/
+const ColoredCodeBlock = memo(function ColoredCodeBlock({
+    code = "",
+    type = "plain-text",
+}: {
+    code?: string;
+    type?: CodeFormat;
+}) {
+    return <>{switchType(type, code)}</>;
+});
+
