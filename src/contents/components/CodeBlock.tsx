@@ -1,205 +1,128 @@
 import { CodeBlock } from "../../components/CodeBlock/CodeBlock";
 
-const importCode = `import Slider, { useSlider, SliderInput } from 'xellanix-react';
-
-/* The arrow function name should be 
-using the function name color too */
-const add = (a: number, b: number): number => {
-    return a + b;
-};
-
-const obj = {
-    name: "hello",
-    value: 0
-}
-
-const arr = [1, 2, 3];
-
-function addBy2(a: number): number {
-    return add(a, 2);
-}
-
-// The 'onChange' (type interpretation) color should be
-// the same as the function name color
-// and the others should be the same as the numeric color
-function Another (
-{
-    onChange,
-    ...props,
-}: {
-    onChange?: (e: any) => void;
-    [key: string]: any;
-}) {
-    return ...props;
-}
-
-function App(c, z: string = "hello", x?: number = 555) {
-    const a = 0.501364;
-    const b = false;
-
-    const d = (e, j?: string = "bello", k: any, l) => {
-        return e;
-    };
-
-    if (a !== b) {
-        return a < b ? 'a' : 'b';
-    }
-
-    z.split("").toString();
-    z.split("").string2 = "";
-
-    return a > !c ? a + b : a >= c ?(a - b): a * b;
-}
-
-function Comp() {
-    const myDiv = <div>hello</div>;
-    const wrapper = <>wrapper</>;
-    const inputtt = <input />;
-
-    return (
-        <button
-            type="button"
-            className="button accent"
-            onClick={() => {
-                const a = 5 < 5 && 5 > 5;
-                return popup.setIsOpen((prev = false) => !prev);
-            }}>
-            Open Popup
-            {children}
-            Open Popup
-            {children}
-            <div>
-                <div disable={true, false}>Div 1</div>
-                <div>{children}</div>
-                <div>
-                    Div 2
-                </div>
-                <div>
-                    {children}
-                    Div 2
-                </div>
-            </div>
-        </button>
-    );
-}
-    
-export default App;`;
-const basicUsageExample = `import React from 'react';
-import Slider, { useSlider, SliderInput } from 'path-to-your-component';
-
-function App() {
-    const sliderRef = useSlider();
-
-    return (
-        <div>
-            <Slider
-                sliderInputRef={sliderRef}
-                min={0}
-                max={100}
-                increment={1}
-                defaultValue={50}
-                onChange={(value) => console.log('Current value:', value)}
-                onDeferredChange={(value) => console.log('Deferred value:', value)}
-            />
-            <SliderInput sliderInputRef={sliderRef} />
-        </div>
-    );
-}
-
-export default App;`;
-const propsExample = `<Slider
-    min={10}
-    max={200}
-    increment={5}
-    defaultValue={75}
-    onChange={(value) => console.log('Slider value changed:', value)}
-    onDeferredChange={(value) => console.log('Final slider value:', value)}
-/>`;
-const integration = `function App() {
-    const sliderRef = useSlider();
-    const [value, setValue] = React.useState(50);
-
-    return (
-        <div>
-            <Slider
-                sliderInputRef={sliderRef}
-                min={0}
-                max={100}
-                increment={1}
-                defaultValue={50}
-                onChange={(value) => setValue(value)}
-                onDeferredChange={(value) => console.log('Final slider value:', value)}
-            />
-            <SliderInput sliderInputRef={sliderRef} />
-            <p>Selected Value: {value}</p>
-        </div>
-    );
-}`;
+const KllHpLygBf = "import { CodeBlock } from 'path-to-your-component';";
+const XT927stDFj =
+    "import React from 'react';\nimport { CodeBlock } from './components/CodeBlock/CodeBlock';\n\nfunction App() {\n    return (\n        <div>\n            <CodeBlock formatAs=\"tsx\" title=\"Example Code\">\n{`import React from 'react';\n\nfunction App() {\n    return <h1>Hello, world!</h1>;\n}\n\nexport default App;`}\n            </CodeBlock>\n        </div>\n    );\n}\n\nexport default App;";
+const tipxS0eVfZ =
+    '<CodeBlock formatAs="html" title="HTML Example">\n{`<div class="container">\n    <h1>Hello, world!</h1>\n</div>`}\n</CodeBlock>';
+const bykC8l6CEG =
+    '<p>\n    You can use the <code className="code">Array.map()</code> method to iterate over arrays.\n</p>';
+const Xx16E5bNwy =
+    '<CodeBlock formatAs="js" title="JavaScript Example">\n{`const sum = (a, b) => a + b;\n\nconsole.log(sum(2, 3));`}\n</CodeBlock>';
 
 export function CodeBlockDev() {
     return (
         <div className="vertical-layout vertical-gap2x">
-            <h2>Implementing and Using the Slider</h2>
+            <h2>Implementing and Using the CodeBlock</h2>
+
             <div className="vertical-layout">
                 <h3>Overview</h3>
                 <p>
-                    This guide explains how to integrate and use the `Slider` component in your
-                    React application. The `Slider` component allows users to select a numeric value
-                    within a specified range by dragging a thumb along a track. This guide covers
-                    the usage and customization of the component, including the optional
-                    `SliderInput` component.
+                    The `CodeBlock` component allows developers to display formatted code snippets
+                    with syntax highlighting for various programming languages. It also includes a
+                    convenient "Copy" button to easily copy the code to the clipboard.
                 </p>
             </div>
+
             <div className="vertical-layout">
-                <h3>Importing the Slider Component</h3>
+                <h3>Importing the CodeBlock Component</h3>
+                <p>To use the `CodeBlock` component, import it into your React project:</p>
+                <CodeBlock formatAs="tsx">{KllHpLygBf}</CodeBlock>
+            </div>
+
+            <div className="vertical-layout">
+                <h3>Using the CodeBlock Component</h3>
                 <p>
-                    Start by importing the `Slider`, `useSlider`, and `SliderInput` components into
-                    your React file:
+                    The `CodeBlock` component is versatile and supports several code formats. You
+                    can customize the display and behavior of the code block using the available
+                    props.
                 </p>
-                <CodeBlock formatAs="tsx">{importCode}</CodeBlock>
-                <CodeBlock formatAs="tsx">true, false</CodeBlock>
+                <h5>Basic Example</h5>
+                <p>Here’s a basic implementation of the `CodeBlock` component:</p>
+                <CodeBlock formatAs="tsx">{XT927stDFj}</CodeBlock>
+                <h5>Key Props</h5>
+                <ul>
+                    <li>
+                        <strong>formatAs</strong> (optional): Defines the syntax highlighting format
+                        for the code block. Accepts `"plain-text"`, `"tsx"`, `"jsx"`, `"html"`,
+                        `"ts"`, or `"js"`. The default is `"plain-text"`.
+                    </li>
+                    <li>
+                        <strong>title</strong> (optional): The title displayed above the code block,
+                        typically used to indicate the code format or language. The default is
+                        `"tsx"`.
+                    </li>
+                    <li>
+                        <strong>children</strong>: The code content to be displayed within the
+                        block. It should be passed as a string.
+                    </li>
+                </ul>
+                <h5>Copying Code</h5>
+                <p>
+                    The `CodeBlock` component includes a "Copy" button that enables users to easily
+                    copy the displayed code to the clipboard. When the code is copied successfully,
+                    the button text changes to "Copied" for a short duration.
+                </p>
+                <h5>Customization Example</h5>
+                <p>
+                    Here’s an example of a `CodeBlock` component with HTML syntax highlighting and a
+                    custom title:
+                </p>
+                <CodeBlock formatAs="tsx">{tipxS0eVfZ}</CodeBlock>
+                <h5>Inline Code</h5>
+                <p>
+                    If you want to display inline code directly within a text or paragraph, use the
+                    following approach:
+                </p>
+                <CodeBlock formatAs="tsx">{bykC8l6CEG}</CodeBlock>
+                <p>
+                    This method is ideal for displaying small code snippets within text without the
+                    need for a full code block.
+                </p>
             </div>
+
             <div className="vertical-layout">
-                <h3>Basic Usage</h3>
-                <p>To use the `Slider` component, follow these steps:</p>
-                <h5>Example Code</h5>
-                <CodeBlock formatAs="tsx">{basicUsageExample}</CodeBlock>
-                <h5>Key Concepts</h5>- **useSlider**: A custom hook that returns a `SliderRef`
-                object, used to control the `Slider` and sync it with other components. -
-                **SliderInput** (Optional): This component allows users to enter a value directly,
-                which is synced with the slider.
+                <h3>Handling Different Code Formats</h3>
+                <p>
+                    The `CodeBlock` component supports syntax highlighting for various formats,
+                    including:
+                </p>
+                <ul>
+                    <li>
+                        <strong>plain-text</strong>: Displays code as plain text without any
+                        formatting.
+                    </li>
+                    <li>
+                        <strong>html</strong>: Highlights HTML code with appropriate colors and
+                        structure.
+                    </li>
+                    <li>
+                        <strong>tsx</strong>/<strong>jsx</strong>: Highlights TypeScript or
+                        JavaScript code with JSX syntax.
+                    </li>
+                    <li>
+                        <strong>ts</strong>/<strong>js</strong>: Highlights TypeScript or JavaScript
+                        code.
+                    </li>
+                </ul>
+                <h5>Advanced Usage</h5>
+                <p>
+                    The `CodeBlock` component dynamically renders syntax highlighting based on the
+                    selected format. This ensures that your code snippets are displayed clearly and
+                    correctly, regardless of the programming language.
+                </p>
+                <h5>Example with JavaScript Code</h5>
+                <CodeBlock formatAs="tsx">{Xx16E5bNwy}</CodeBlock>
             </div>
-            <div className="vertical-layout">
-                <h3>Customizing the Slider Component</h3>
-                You can customize the `Slider` component by passing different props to control its
-                behavior:
-                <h5>Available Props</h5>- **min**: Minimum value (e.g., `0`). - **max**: Maximum
-                value (e.g., `100`). - **increment**: The amount by which the value should increase
-                or decrease (e.g., `1`). - **defaultValue**: The initial value of the slider. -
-                **onChange**: A callback function that triggers whenever the slider value changes. -
-                **onDeferredChange**: A callback function that triggers when the slider value is
-                finalized (e.g., on mouse release). - **style**: An optional prop to apply inline
-                styles to the slider component.
-                <h5>Example Usage</h5>
-                <CodeBlock formatAs="tsx">{propsExample}</CodeBlock>
-            </div>
-            <div className="vertical-layout">
-                <h3>Handling User Input with SliderInput</h3>
-                The `SliderInput` component is optional and allows users to enter a value directly,
-                which is then synced with the slider.
-                <h5>Example Usage</h5>
-                <CodeBlock formatAs="tsx">{`<SliderInput sliderInputRef={sliderRef} />`}</CodeBlock>
-                <h5>Integration</h5>
-                You can combine the `Slider` and `SliderInput` components to provide both slider and
-                direct input capabilities:
-                <CodeBlock formatAs="tsx">{integration}</CodeBlock>
-            </div>
+
             <div className="vertical-layout">
                 <h3>Conclusion</h3>
-                You’ve now implemented and customized the `Slider` component in your React
-                application. The `SliderInput` component is optional and provides an additional way
-                for users to input values. For further customization or advanced usage, refer to the
-                component’s documentation or seek support from the developer community.
+                <p>
+                    The `CodeBlock` component is a powerful tool for displaying code snippets with
+                    syntax highlighting in your React application. It supports multiple formats,
+                    includes a handy copy feature, and is easy to integrate and customize according
+                    to your needs.
+                </p>
             </div>
         </div>
     );

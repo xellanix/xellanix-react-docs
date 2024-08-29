@@ -8,5 +8,12 @@ export default defineConfig({
 	build: {
 		minify: true,
 		assetsInlineLimit: 0,
+		rollupOptions: {
+			output: {
+				manualChunks: {
+					"comlink-worker": ["comlink"],
+				},
+			},
+		},
 	},
 });

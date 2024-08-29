@@ -28,6 +28,7 @@
 #right-side {
 	box-sizing: border-box;
 	padding: 1.2em;
+	min-width: 0;
 }
 #right-side > .scrollable {
 	margin-right: calc((1.2em + 16px) * -1);
@@ -115,11 +116,6 @@ ul {
 
 .red-toggle-switch {
 	--accent-color: #f00;
-}
-
-#right-side {
-	width: 0%;
-	box-sizing: border-box;
 }
 
 @media (max-width: 720px) {

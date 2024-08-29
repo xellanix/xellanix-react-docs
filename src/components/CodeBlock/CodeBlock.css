@@ -70,6 +70,10 @@ pre.xellanix-code-block-pre > div {
 	margin-right: 1em;
 }
 
+pre.xellanix-code-block-pre code {
+	tab-size: 4;
+}
+
 code .tc {
 	/* tag cage */
 	color: var(--code-tag-cage-color);

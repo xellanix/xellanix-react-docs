@@ -6,6 +6,7 @@ import GroupedContentList, {
 import { Breadcrumbs } from "./components/Breadcrumbs/Breadcrumbs";
 import ThemeSelector from "./components/ThemeSelector/ThemeSelector";
 import { BenchmarkDev } from "./Benchmark";
+import { MarkdownToJSX } from "./MarkdownToJSX";
 
 import { Welcome } from "./contents/getting-started/Welcome";
 import { InfoBoxDev } from "./contents/getting-started/InfoBox";
@@ -53,6 +54,7 @@ if (import.meta.env.DEV)
         name: "Development",
         items: [
             { name: "CodeBlock", content: <CodeBlockDev /> },
+            { name: "Markdown To JSX Format", content: <MarkdownToJSX /> },
             { name: "Benchmark", content: <BenchmarkDev /> },
         ],
     });
